@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verificación de Grado Egresados Universidad ICESI</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/icesi.css') }}">
+</head>
+<body>
+<header class="top">
+  <div class="brand-wrap">
+    <img src="{{ url_for('static', filename='img/icesi_logo_overlay.png') }}" alt="Universidad ICESI CERTYCO">
+  </div>
+</header>
+
+<main class="card">
+  <h1>Verificación de Grado Egresados Universidad ICESI</h1>
+
+  <p>A partir de ésta opción podrá verificar la autenticidad del grado obtenido por un egresado de la universidad.</p>
+
+  <p>Para realizar la consulta, por favor siga los pasos descritos a continuación:</p>
+  <ul class="steps">
+    <li>Ingrese el código o número de identificación del egresado.</li>
+    <li>Presione el botón "Verificar".</li>
+    <li>Para que el certificado sea válido, la información de grado obtenida en el diploma debe ser idéntica a la que descargará a continuación.</li>
+  </ul>
+
+  <form method="post" class="search-form">
+    <label for="criterio">Ingrese número de identificación o el código:</label>
+    <input id="criterio" name="criterio" value="{{ criterio }}" autocomplete="off">
+    <div></div>
+    <button type="submit">Verificar</button>
+  </form>
+
+  {% if buscado %}
+  <section class="results">
+    <h2>Resultados busqueda</h2>
+    {% if graduado %}
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Código</th><th>Nombre</th><th>Fecha grado</th><th>Tipo Id</th>
+          <th>Documento Id</th><th>Período ingreso programa</th>
+          <th>Título obtenido</th><th>Número diploma</th><th>Certificado</th>
+        </tr></thead>
+        <tbody><tr>
+          <td>{{ graduado.codigo }}</td><td>{{ graduado.nombre }}</td><td>{{ graduado.fecha_grado }}</td>
+          <td>{{ graduado.tipo_id }}</td><td>{{ graduado.documento }}</td><td>{{ graduado.periodo_ingreso }}</td>
+          <td>{{ graduado.titulo }}</td><td>{{ graduado.numero_diploma }}</td>
+          <td>{% if graduado.certificado_archivo %}<a class="download" href="{{ url_for('certificado', graduado_id=graduado.id) }}">Descargar</a>{% endif %}</td>
+        </tr></tbody>
+      </table>
+    </div>
+    {% else %}
+      <p class="not-found">No se encontraron resultados para la información ingresada.</p>
+    {% endif %}
+  </section>
+  {% endif %}
+
+  <section class="legal">
+    <p>*La información de grados que otorgan títulos a los estudiantes de programas ofrecidos por la Universidad, son considerados públicos, y por lo tanto se encuentran dentro del marco excepcional del artículo 10° de la Ley 1581 de 2012 (Ley estatutaria y general de Protección de Datos). Es por esto que la Universidad Icesi al cumplir y prestar un servicio público, por delegación del Ministerio de Educación Nacional y obrando en nombre de la República de Colombia, tiene la libre facultad de suministrar los datos de contenido público a quien tenga un interés por conocerlos. Para todos los efectos, serán de aplicación las normas vigentes sobre Habeas Data ¿ Datos Personales, en especial las consagradas en el Art. 15 de la Constitución Política Nacional, la Ley estatutaria No 1266 de 2008; los Decretos Reglamentarios Decreto 1727 de 2009 y Decreto 2952 de 2010; la Ley Estatutaria No 1581 de 2012, y su Decreto reglamentario 1377 de 2013; y demás normas aplicables; y será de entera responsabilidad de los usuarios del sistema implementado, el manejo, uso, destinación y almacenamiento. El acceso y consulta de los datos personales contenidos en la base de datos proporcionados, quedará de igual forma supeditado, y se deberá dar cumplimiento por parte de los usuarios, a lo previsto y dispuesto en las directrices sobre manejo de datos personales expedida por la Universidad Icesi, la cual puede ser consultada en: https://www.icesi.edu.co/es/politica-de-tratamiento-de-datos-personales</p>
+  </section>
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="{{ url_for('static', filename='img/icesi_logo_overlay.png') }}" alt="Universidad ICESI CERTYCO">
+    </div>
+    <div class="footer-address">
+      <div>Universidad Icesi, Calle 18 No. 122 - 135</div>
+      <div>Pance, Cali - Colombia</div>
+      <div>Teléfono: +57 (2) 555 2334</div>
+      <div>Fax: +57 (2) 555 1441</div>
+    </div>
+    <div class="footer-follow">
+      <div>Síguenos:</div>
+    </div>
+    <div class="footer-info">
+      <div>La Universidad Icesi es una Institución de Educación Superior que se encuentra sujeta a inspección y vigilancia por parte del Ministerio de Educación Nacional.</div>
+      <div>Sitio desarrollado por: SYRI DS Desarrollo de Sistemas</div>
+    </div>
+    <div class="footer-copy">
+      <div>Copyright © 2009 - 2022</div>
+    </div>
+    <div class="footer-browser">
+      Recomendamos navegadores o versiones superiores a Chrome 35, IE 11, Firefox 52, Safari 10
+    </div>
+  </div>
+</footer>
+</body>
+</html>

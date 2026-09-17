@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>Registro de estudiante - ICESI</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #ffffff;
+            color: #222;
+        }
+
+        .contenedor {
+            width: 725px;
+            max-width: calc(100% - 40px);
+            margin: 45px auto;
+        }
+
+        h1 {
+            color: #1e4e91;
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+
+        .formulario {
+            border: 1px solid #ddd;
+            padding: 30px;
+        }
+
+        .campo {
+            margin-bottom: 18px;
+        }
+
+        .campo label {
+            display: block;
+            font-size: 15px;
+            margin-bottom: 7px;
+        }
+
+        .campo input {
+            width: 100%;
+            height: 40px;
+            box-sizing: border-box;
+            border: 1px solid #aaa;
+            border-radius: 3px;
+            padding: 8px;
+            font-size: 15px;
+        }
+
+        .boton {
+            background: #38a94e;
+            color: white;
+            border: 0;
+            border-radius: 4px;
+            padding: 11px 25px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .mensaje {
+            border: 1px solid #ddd;
+            padding: 12px;
+            margin-bottom: 20px;
+        }
+
+        .resultado {
+            width: 725px;
+            max-width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #d4d4d4;
+            padding: 55px 35px 35px;
+            text-align: center;
+        }
+
+        .resultado h2 {
+            color: #18a944;
+            font-size: 25px;
+            font-weight: normal;
+            margin: 0 0 15px;
+        }
+
+        .linea {
+            border-top: 1px solid #ddd;
+            margin-bottom: 28px;
+        }
+
+        .texto-codigo {
+            font-size: 19px;
+            margin-bottom: 18px;
+        }
+
+        .codigo {
+            color: #087f45;
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .descripcion {
+            font-size: 17px;
+            margin-bottom: 28px;
+        }
+
+        .qr {
+            width: 230px;
+            height: 230px;
+            display: block;
+            margin: 0 auto 30px;
+        }
+
+        .boton-verificacion {
+            display: inline-block;
+            background: #38a94e;
+            color: white;
+            text-decoration: none;
+            padding: 13px 23px;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .nuevo {
+            display: block;
+            margin-top: 25px;
+            color: #1e4e91;
+            text-decoration: none;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="contenedor">
+
+
+{% if registrado %}
+
+
+    <div class="resultado">
+
+        <h2>
+            Estudiante registrado correctamente
+        </h2>
+
+        <div class="linea"></div>
+
+        <div class="texto-codigo">
+            Código de verificación:
+        </div>
+
+        <div class="codigo">
+            {{ codigo }}
+        </div>
+
+        <div class="descripcion">
+            Este código puede utilizarse en la consulta pública.
+        </div>
+
+
+        {% if qr_archivo %}
+
+            <img
+                class="qr"
+                src="{{ url_for(
+                    'static',
+                    filename='qr/' + qr_archivo
+                ) }}"
+                alt="Código QR"
+            >
+
+        {% endif %}
+
+
+        <a
+            class="boton-verificacion"
+            href="{{ url_for(
+                'index',
+                criterio=codigo
+            ) }}"
+        >
+            Abrir verificación
+        </a>
+
+
+        <a
+            class="nuevo"
+            href="{{ url_for('registro') }}"
+        >
+            Registrar otro estudiante
+        </a>
+
+    </div>
+
+
+{% else %}
+
+
+    <h1>
+        Registro de estudiante
+    </h1>
+
+
+    {% with mensajes = get_flashed_messages() %}
+
+        {% if mensajes %}
+
+            <div class="mensaje">
+
+                {% for mensaje in mensajes %}
+                    {{ mensaje }}
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <form
+        method="POST"
+        class="formulario"
+    >
+
+
+        <div class="campo">
+
+            <label>
+                Nombres
+            </label>
+
+            <input
+                type="text"
+                name="nombres"
+                required
+            >
+
+        </div>
+
+
+        <div class="campo">
+
+            <label>
+                Apellidos
+            </label>
+
+            <input
+                type="text"
+                name="apellidos"
+                required
+            >
+
+        </div>
+
+
+        <div class="campo">
+
+            <label>
+                Documento de identificación
+            </label>
+
+            <input
+                type="text"
+                name="documento"
+                required
+            >
+
+        </div>
+
+
+        <div class="campo">
+
+            <label>
+                Programa académico
+            </label>
+
+            <input
+                type="text"
+                name="programa"
+                required
+            >
+
+        </div>
+
+
+        <div class="campo">
+
+            <label>
+                Título obtenido
+            </label>
+
+            <input
+                type="text"
+                name="titulo"
+                required
+            >
+
+        </div>
+
+
+        <div class="campo">
+
+            <label>
+                Período de ingreso al programa
+            </label>
+
+            <input
+                type="text"
+                name="periodo_ingreso"
+                placeholder="Ejemplo: 2019-1"
+                required
+            >
+
+        </div>
+
+
+        <div class="campo">
+
+            <label>
+                Fecha de grado
+            </label>
+
+            <input
+                type="date"
+                name="fecha_grado"
+                required
+            >
+
+        </div>
+
+
+        <div class="campo">
+
+            <label>
+                Número de acta
+            </label>
+
+            <input
+                type="text"
+                name="acta"
+                required
+            >
+
+        </div>
+
+
+        <div class="campo">
+
+            <label>
+                Número de diploma
+            </label>
+
+            <input
+                type="text"
+                name="diploma"
+                required
+            >
+
+        </div>
+
+
+        <div class="campo">
+
+            <label>
+                Estado
+            </label>
+
+            <input
+                type="text"
+                name="estado"
+                value="GRADUADO"
+                required
+            >
+
+        </div>
+
+
+        <button
+            class="boton"
+            type="submit"
+        >
+            Registrar estudiante
+        </button>
+
+
+    </form>
+
+
+{% endif %}
+
+
+</div>
+
+</body>
+
+</html>

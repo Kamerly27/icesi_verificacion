@@ -1,0 +1,15 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Admisiones y Registro</title>
+<link rel="stylesheet" href="{{url_for('static',filename='css/icesi.css')}}"></head><body><main class="admin-page">
+<div class="admin-head"><h1>Admisiones y Registro</h1><a href="{{url_for('admin_logout')}}">Salir</a></div>
+{% with messages=get_flashed_messages() %}{% if messages %}<div class="messages">{% for m in messages %}<p>{{m}}</p>{% endfor %}</div>{% endif %}{% endwith %}
+<h2>Registrar egresado</h2><form method="post" action="{{url_for('guardar')}}" enctype="multipart/form-data" class="admin-form">
+{% for key,label in [("codigo","Código"),("nombre","Nombre"),("fecha_grado","Fecha grado"),("tipo_id","Tipo Id"),("documento","Documento Id"),("periodo_ingreso","Período ingreso programa"),("titulo","Título obtenido"),("numero_diploma","Número diploma"),("ciudad_documento","Ciudad documento"),("periodo_final","Período final"),("acta_grado","Acta de grado")] %}
+<label>{{label}}</label><input name="{{key}}" required>{% endfor %}
+<label>Certificado autorizado (PDF)</label><input type="file" name="certificado" accept="application/pdf">
+<button type="submit">Guardar</button></form>
+<h2>Registros</h2><div class="table-wrap"><table><tr><th>Código</th><th>Nombre</th><th>Documento</th><th>Fecha grado</th><th>Acción</th></tr>
+{% for g in graduados %}<tr><td>{{g.codigo}}</td><td>{{g.nombre}}</td><td>{{g.documento}}</td><td>{{g.fecha_grado}}</td><td>
+<form method="post" action="{{url_for('eliminar',graduado_id=g.id)}}"><button type="submit">Eliminar</button></form></td></tr>{% endfor %}</table></div>
+<h2>Consultas recientes</h2><div class="table-wrap"><table><tr><th>Criterio</th><th>Resultado</th><th>Fecha y hora</th><th>IP</th></tr>
+{% for c in consultas %}<tr><td>{{c.criterio}}</td><td>{{c.resultado}}</td><td>{{c.fecha_hora}}</td><td>{{c.ip}}</td></tr>{% endfor %}</table></div>
+</main></body></html>

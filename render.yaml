@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: icesi-verificacion
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ADMIN_USER
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+    disk:
+      name: icesi-data
+      mountPath: /opt/render/project/src
+      sizeGB: 1
