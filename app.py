@@ -85,7 +85,9 @@ def init_db():
 
     if es_postgres():
 
-        conexion.cursor().execute("""
+        cursor = conexion.cursor()
+
+        cursor.execute("""
             CREATE TABLE IF NOT EXISTS graduados (
                 id SERIAL PRIMARY KEY,
                 codigo TEXT UNIQUE NOT NULL,
@@ -105,7 +107,7 @@ def init_db():
             )
         """)
 
-        conexion.cursor().execute("""
+        cursor.execute("""
             CREATE TABLE IF NOT EXISTS consultas (
                 id SERIAL PRIMARY KEY,
                 criterio TEXT NOT NULL,
@@ -278,6 +280,10 @@ def index():
 
         conexion = db()
 
+        # -------------------------------------------------
+        # POSTGRESQL
+        # -------------------------------------------------
+
         if es_postgres():
 
             cursor = conexion.cursor()
@@ -293,6 +299,7 @@ def index():
                     titulo,
                     periodo_ingreso,
                     fecha_grado,
+                    numero_diploma,
                     estado
                 FROM graduados
                 WHERE documento=%s
@@ -307,6 +314,10 @@ def index():
 
             graduado = cursor.fetchone()
 
+        # -------------------------------------------------
+        # SQLITE
+        # -------------------------------------------------
+
         else:
 
             graduado = conexion.execute(
@@ -320,6 +331,7 @@ def index():
                     titulo,
                     periodo_ingreso,
                     fecha_grado,
+                    numero_diploma,
                     estado
                 FROM graduados
                 WHERE documento=?
